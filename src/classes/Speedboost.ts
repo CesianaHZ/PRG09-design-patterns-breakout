@@ -1,24 +1,11 @@
+import { NormalMovement, SpeedBoostMovement } from "./MovementStrategies";
 import { Paddle } from "./paddle";
-import { PowerUp } from "./PowerUp";
+import { PowerUpStrategy } from "./PowerUpStrategy";
 
-export class SpeedBoost extends PowerUp {
-    constructor(x: number, y: number) {
-        super(x, y, "blue");
-    }
-
-    protected activateEffect(paddle: Paddle) {
-        paddle.setSpeed(paddle.getSpeed() * 2);
-        setTimeout(() => paddle.setSpeed(paddle.getSpeed() / 2), 3000);
-    }
-}
-
-export class Freeze extends PowerUp {
-    constructor(x: number, y: number) {
-        super(x, y, "red");
-    }
-
-    protected activateEffect(paddle: Paddle) {
-        paddle.setSpeed(0);
-        setTimeout(() => paddle.setSpeed(7), 3000);
+export class SpeedBoost implements PowerUpStrategy {
+    applyEffect(paddle: Paddle) {
+        console.log("Speed Boost Activated!");
+        paddle.setMovementStrategy(new SpeedBoostMovement());
+        setTimeout(() => paddle.setMovementStrategy(new NormalMovement()), 5000);
     }
 }
