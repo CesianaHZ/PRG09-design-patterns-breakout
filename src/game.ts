@@ -1,3 +1,5 @@
+import { Ball } from "./classes/Ball";
+import { BrickManager } from "./classes/BrickManager";
 import { Paddle } from "./classes/paddle";
 
 /**
@@ -5,20 +7,26 @@ import { Paddle } from "./classes/paddle";
  * starts the game loop.
  */
 class Game {
-    // Fields
-    private paddle : Paddle
+
+    // fields
+    private paddle: Paddle;
+    private ball: Ball;
+    private brickManager: BrickManager;
 
     constructor() {
-        this.paddle = new Paddle()
+        this.paddle = new Paddle();
+        this.ball = new Ball(this.paddle);
+        this.brickManager = new BrickManager();
 
-        this.gameLoop()
+        this.gameLoop();
     }
 
     private gameLoop() {
-        this.paddle.update()
-
-        requestAnimationFrame(() => this.gameLoop())
+        this.paddle.update();
+        this.ball.update(this.brickManager, this.paddle);
+        requestAnimationFrame(() => this.gameLoop());
     }
 }
+
 // This is the entry point of the game. It is called when the page is loaded.
 window.addEventListener("load", () => new Game())
