@@ -59,12 +59,12 @@ export class Ball extends HTMLElement {
             }
         }
 
-        // Ball falls below the paddle
         if (this.y > window.innerHeight) {
-            this.y = 500
-            this.x = 500
-            this.speedX = 1
-            this.speedY = 5
+            this.y = 500;
+            this.x = 700;
+            this.speedX = Math.random() < 0.5 ? -3 : 3;
+            this.speedY = -7;
+            paddle.setX(700);
         }
 
         this.draw();

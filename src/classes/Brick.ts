@@ -25,7 +25,7 @@ export class Brick extends HTMLElement {
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this);
 
-        // Apply color after DOM update
+
         requestAnimationFrame(() => {
             this.style.backgroundColor = this.color;
         });

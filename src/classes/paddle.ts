@@ -1,4 +1,5 @@
 import { NormalMovement } from "./movementStrategies";
+import { MovementStrategy } from "./MovementStrategy";
 
 export class Paddle extends HTMLElement {
     private x: number = 0;
