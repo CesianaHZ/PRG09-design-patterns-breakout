@@ -1,9 +1,5 @@
 import { Brick } from "./Brick";
-import { Freeze } from "./Freeze";
-import { PowerUp } from "./PowerUp";
 import { PurpleBrick } from "./PurpleBrick";
-import { ReverseControls } from "./ReverseControls";
-import { SpeedBoost } from "./Speedboost";
 import { YellowBrick } from "./YellowBrick";
 
 export class BrickManager {
@@ -23,21 +19,21 @@ export class BrickManager {
                 let offsetX = (window.innerWidth - this.columns * this.brickWidth) / 2;
                 let x = column * this.brickWidth + offsetX;
                 let y = row * this.brickHeight + 100;
-    
+
                 let brick: Brick;
                 if (Math.random() < 0.3) {
-                    brick = new YellowBrick(x, y);
+                    brick = new YellowBrick(x, y, this);
                 } else {
                     brick = new PurpleBrick(x, y);
                 }
-    
+
                 let game = document.getElementsByTagName("game")[0];
                 if (game) {
                     game.appendChild(brick);
                 } else {
                     console.error("Game element not found!");
                 }
-    
+
                 this.bricks.push(brick);
             }
         }
@@ -55,12 +51,20 @@ export class BrickManager {
         brick.destroy();
     }
 
-    private spawnPowerUp(brick: Brick) {
-        let strategy = Math.random() < 0.33 ? new SpeedBoost()
-                      : Math.random() < 0.66 ? new Freeze()
-                      : new ReverseControls();
+    public replaceBrick(oldBrick: Brick, newBrick: Brick) {
+        const index = this.bricks.indexOf(oldBrick);
+        if (index !== -1) {
+            this.bricks[index] = newBrick;
 
-        new PowerUp(brick.getX(), brick.getY(), strategy);
+            const parent = oldBrick.parentElement;
+            if (parent) {
+                parent.replaceChild(newBrick, oldBrick);
+            }
+        }
+    }
+
+    private spawnPowerUp(brick: Brick) {
+        // Power-up logic here
     }
 
     public getBricks(): Brick[] {

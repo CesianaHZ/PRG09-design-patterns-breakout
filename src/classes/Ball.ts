@@ -30,24 +30,20 @@ export class Ball extends HTMLElement {
         this.x += this.speedX;
         this.y += this.speedY;
 
-        // Bounce off walls
         if (this.x < 0 || this.x + this.radius * 2 > window.innerWidth) {
             this.speedX *= -1;
         }
 
-        // Bounce off top
         if (this.y < 0) {
             this.speedY *= -1;
         }
 
-        // Check collision with paddle
         if (this.y + this.radius * 2 >= paddle.getY() && 
             this.x + this.radius > paddle.getX() &&
             this.x < paddle.getX() + paddle.getWidth()) {
             this.speedY *= -1;
         }
 
-        // Check collision with bricks
         for (let brick of brickManager.getBricks()) {
             if (this.x + this.radius > brick.offsetLeft &&
                 this.x < brick.offsetLeft + brick.clientWidth &&
