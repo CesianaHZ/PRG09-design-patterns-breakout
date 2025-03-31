@@ -1,4 +1,4 @@
-import { FrozenMovement, NormalMovement } from "./movementStrategies";
+import { FrozenMovement, NormalMovement } from "./MovementStrategies";
 import { Paddle } from "./paddle";
 import { PowerUpStrategy } from "./PowerUpStrategy";
 

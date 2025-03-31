@@ -1,8 +1,10 @@
 import { Brick } from "./Brick";
-import { SpeedBoost } from "./Speedboost";
 import { Freeze } from "./Freeze";
-import { ReverseControls } from "./ReverseControls";
 import { PowerUp } from "./PowerUp";
+import { PurpleBrick } from "./PurpleBrick";
+import { ReverseControls } from "./ReverseControls";
+import { SpeedBoost } from "./Speedboost";
+import { YellowBrick } from "./YellowBrick";
 
 export class BrickManager {
     private bricks: Brick[] = [];
@@ -21,17 +23,34 @@ export class BrickManager {
                 let offsetX = (window.innerWidth - this.columns * this.brickWidth) / 2;
                 let x = column * this.brickWidth + offsetX;
                 let y = row * this.brickHeight + 100;
-
-                let brick = new Brick(x, y);
+    
+                // Randomly create a YellowBrick or PurpleBrick
+                let brick: Brick;
+                if (Math.random() < 0.3) {
+                    brick = new YellowBrick(x, y); // Use the constructor directly
+                } else {
+                    brick = new PurpleBrick(x, y); // Use the constructor directly
+                }
+    
+                // Append the brick to the game element
+                let game = document.getElementsByTagName("game")[0];
+                if (game) {
+                    game.appendChild(brick);
+                } else {
+                    console.error("Game element not found!");
+                }
+    
                 this.bricks.push(brick);
             }
         }
     }
 
     public removeBrick(brick: Brick) {
+        if (!brick.hit()) return;
+
         this.bricks = this.bricks.filter(b => b !== brick);
 
-        if (brick.getColor() !== "grey") {
+        if (brick.classList.contains("brick-component")) {
             this.spawnPowerUp(brick);
         }
 
@@ -39,15 +58,11 @@ export class BrickManager {
     }
 
     private spawnPowerUp(brick: Brick) {
-        let brickColor = brick.getColor();
-        let strategy = brickColor === "blue" ? new SpeedBoost()
-                      : brickColor === "red" ? new Freeze()
-                      : brickColor === "yellow" ? new ReverseControls()
-                      : null;
+        let strategy = Math.random() < 0.33 ? new SpeedBoost()
+                      : Math.random() < 0.66 ? new Freeze()
+                      : new ReverseControls();
 
-        if (strategy) {
-            new PowerUp(brick.offsetLeft, brick.offsetTop, strategy);
-        }
+        new PowerUp(brick.getX(), brick.getY(), strategy);
     }
 
     public getBricks(): Brick[] {

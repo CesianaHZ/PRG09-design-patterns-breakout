@@ -1,4 +1,4 @@
-import { NormalMovement } from "./movementStrategies";
+import { NormalMovement } from "./MovementStrategies";
 import { MovementStrategy } from "./MovementStrategy";
 
 export class Paddle extends HTMLElement {
