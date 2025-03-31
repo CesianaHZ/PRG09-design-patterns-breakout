@@ -17,6 +17,5 @@ export class YellowBrick extends Brick {
         return this.hitPoints <= 0;
     }
 }
-
-// Register YellowBrick as a custom element
+0
 window.customElements.define("yellow-brick", YellowBrick);

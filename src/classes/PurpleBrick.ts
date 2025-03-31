@@ -8,4 +8,4 @@ export class PurpleBrick extends Brick {
     }
 }
 
-window.customElements.define("purple-brick", PurpleBrick);
+window.customElements.define("brick-component", PurpleBrick);

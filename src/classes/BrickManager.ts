@@ -24,15 +24,13 @@ export class BrickManager {
                 let x = column * this.brickWidth + offsetX;
                 let y = row * this.brickHeight + 100;
     
-                // Randomly create a YellowBrick or PurpleBrick
                 let brick: Brick;
                 if (Math.random() < 0.3) {
-                    brick = new YellowBrick(x, y); // Use the constructor directly
+                    brick = new YellowBrick(x, y);
                 } else {
-                    brick = new PurpleBrick(x, y); // Use the constructor directly
+                    brick = new PurpleBrick(x, y);
                 }
     
-                // Append the brick to the game element
                 let game = document.getElementsByTagName("game")[0];
                 if (game) {
                     game.appendChild(brick);
