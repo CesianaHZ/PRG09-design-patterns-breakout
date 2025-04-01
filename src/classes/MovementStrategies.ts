@@ -27,7 +27,7 @@ export class SpeedBoostMovement implements MovementStrategy {
 
 export class FrozenMovement implements MovementStrategy {
     move(paddle: Paddle): void {
-        // No movement when frozen
+        
     }
 }
 

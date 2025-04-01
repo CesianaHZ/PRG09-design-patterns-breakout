@@ -38,7 +38,7 @@ export class Ball extends HTMLElement {
             this.speedY *= -1;
         }
 
-        if (this.y + this.radius * 2 >= paddle.getY() && 
+        if (this.y + this.radius * 2 >= paddle.getY() &&
             this.x + this.radius > paddle.getX() &&
             this.x < paddle.getX() + paddle.getWidth()) {
             this.speedY *= -1;
@@ -54,6 +54,8 @@ export class Ball extends HTMLElement {
                 break;
             }
         }
+        
+        brickManager.updatePowerUps(this, paddle);
 
         if (this.y > window.innerHeight) {
             this.y = 500;
@@ -71,4 +73,5 @@ export class Ball extends HTMLElement {
         this.style.top = `${this.y}px`;
     }
 }
+
 window.customElements.define("ball-component", Ball as any);

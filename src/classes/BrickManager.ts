@@ -1,13 +1,15 @@
 import { Brick } from "./Brick";
 import { PurpleBrick } from "./PurpleBrick";
-import { YellowBrick } from "./YellowBrick";
 import { PowerUp } from "./PowerUp";
 import { Freeze } from "./Freeze";
 import { ReverseControls } from "./ReverseControls";
 import { SpeedBoost } from "./Speedboost";
+import { Paddle } from "./paddle";
+import { YellowBrick } from "./YellowBrick";
 
 export class BrickManager {
     private bricks: Brick[] = [];
+    private powerUps: PowerUp[] = [];
     private rows: number = 7;
     private columns: number = 12;
     private brickWidth: number = 64;
@@ -48,7 +50,6 @@ export class BrickManager {
 
         this.bricks = this.bricks.filter(b => b !== brick);
 
-        // Check if the brick is a purple brick that was originally a yellow brick
         if (brick instanceof PurpleBrick && brick.wasOriginallyYellow()) {
             this.spawnPowerUp(brick);
         }
@@ -59,7 +60,19 @@ export class BrickManager {
     private spawnPowerUp(brick: Brick) {
         const strategies = [new SpeedBoost(), new ReverseControls(), new Freeze()];
         const randomStrategy = strategies[Math.floor(Math.random() * strategies.length)];
-        new PowerUp(brick.getX(), brick.getY(), randomStrategy);
+        const powerUp = new PowerUp(brick.getX(), brick.getY(), randomStrategy);
+        this.powerUps.push(powerUp);
+    }
+
+    public updatePowerUps(ball: HTMLElement, paddle: Paddle) {
+        for (let i = this.powerUps.length - 1; i >= 0; i--) {
+            const powerUp = this.powerUps[i];
+            powerUp.update(ball, paddle);
+
+            if (!document.body.contains(powerUp)) {
+                this.powerUps.splice(i, 1);
+            }
+        }
     }
 
     public replaceBrick(oldBrick: Brick, newBrick: Brick) {
