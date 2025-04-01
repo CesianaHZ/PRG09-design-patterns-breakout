@@ -1,6 +1,10 @@
 import { Brick } from "./Brick";
 import { PurpleBrick } from "./PurpleBrick";
 import { YellowBrick } from "./YellowBrick";
+import { PowerUp } from "./PowerUp";
+import { Freeze } from "./Freeze";
+import { ReverseControls } from "./ReverseControls";
+import { SpeedBoost } from "./Speedboost";
 
 export class BrickManager {
     private bricks: Brick[] = [];
@@ -44,11 +48,18 @@ export class BrickManager {
 
         this.bricks = this.bricks.filter(b => b !== brick);
 
-        if (brick.classList.contains("brick-component")) {
+        // Check if the brick is a purple brick that was originally a yellow brick
+        if (brick instanceof PurpleBrick && brick.wasOriginallyYellow()) {
             this.spawnPowerUp(brick);
         }
 
         brick.destroy();
+    }
+
+    private spawnPowerUp(brick: Brick) {
+        const strategies = [new SpeedBoost(), new ReverseControls(), new Freeze()];
+        const randomStrategy = strategies[Math.floor(Math.random() * strategies.length)];
+        new PowerUp(brick.getX(), brick.getY(), randomStrategy);
     }
 
     public replaceBrick(oldBrick: Brick, newBrick: Brick) {
@@ -61,10 +72,6 @@ export class BrickManager {
                 parent.replaceChild(newBrick, oldBrick);
             }
         }
-    }
-
-    private spawnPowerUp(brick: Brick) {
-        // Power-up logic here
     }
 
     public getBricks(): Brick[] {

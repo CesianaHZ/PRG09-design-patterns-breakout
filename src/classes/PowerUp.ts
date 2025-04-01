@@ -7,7 +7,7 @@ import { SpeedBoost } from "./Speedboost";
 export class PowerUp extends HTMLElement {
     private x: number;
     private y: number;
-    private speedY: number = 3;
+    private speedY: number = 3; // Falling speed of the power-up
     private strategy: PowerUpStrategy;
 
     constructor(x: number, y: number, strategy: PowerUpStrategy) {
@@ -17,10 +17,10 @@ export class PowerUp extends HTMLElement {
         this.strategy = strategy;
 
         this.style.position = "absolute";
-        this.style.width = "20px";
-        this.style.height = "20px";
-        this.style.borderRadius = "50%";
-        this.style.backgroundColor = this.getColorByStrategy();
+        this.style.width = "48px";
+        this.style.height = "46px";
+        this.style.backgroundImage = `url(${this.getImageByStrategy()})`;
+        this.style.backgroundSize = "cover";
         this.style.left = `${this.x}px`;
         this.style.top = `${this.y}px`;
 
@@ -28,21 +28,36 @@ export class PowerUp extends HTMLElement {
         game.appendChild(this);
     }
 
-    private getColorByStrategy(): string {
-        if (this.strategy instanceof SpeedBoost) return "blue";
-        if (this.strategy instanceof ReverseControls) return "yellow";
-        if (this.strategy instanceof Freeze) return "red";
-        return "white";
+    private getImageByStrategy(): string {
+        if (this.strategy instanceof SpeedBoost) return "/images/upgrades/polygon_blue.png";
+        if (this.strategy instanceof ReverseControls) return "/images/upgrades/polygon_yellow.png";
+        if (this.strategy instanceof Freeze) return "/images/upgrades/polygon_red.png";
+        return "/images/upgrades/polygon_white.png";
     }
 
-    public update(paddle: Paddle) {
+    public update(ball: HTMLElement, paddle: Paddle) {
         this.y += this.speedY;
 
-        if (this.y + 20 > paddle.getY() &&
-            this.x > paddle.getX() &&
+        if (this.y + 46 > paddle.getY() &&
+            this.x + 48 > paddle.getX() &&
             this.x < paddle.getX() + paddle.getWidth()) {
             this.strategy.applyEffect(paddle);
             this.remove();
+            return;
+        }
+
+        const ballRect = ball.getBoundingClientRect();
+        const powerUpRect = this.getBoundingClientRect();
+
+        if (
+            ballRect.left < powerUpRect.right &&
+            ballRect.right > powerUpRect.left &&
+            ballRect.top < powerUpRect.bottom &&
+            ballRect.bottom > powerUpRect.top
+        ) {
+            this.strategy.applyEffect(paddle);
+            this.remove();
+            return;
         }
 
         this.draw();

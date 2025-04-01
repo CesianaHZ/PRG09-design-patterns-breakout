@@ -15,8 +15,7 @@ export class YellowBrick extends Brick {
     public hit(): boolean {
         this.hitPoints--;
         if (this.hitPoints === 1) {
-            const purpleBrick = new PurpleBrick(this.x, this.y);
-
+            const purpleBrick = new PurpleBrick(this.x, this.y, true); 
             this.brickManager.replaceBrick(this, purpleBrick);
 
             return false;
